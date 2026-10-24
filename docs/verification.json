@@ -4,7 +4,7 @@
   "runtime": "Node 24.19.0",
   "tests": {
     "slug": "budgetgate",
-    "tests": 4,
+    "tests": 7,
     "pass": true,
     "runtime": "v24.19.0"
   },
@@ -37,5 +37,10 @@
     "slug": "budgetgate",
     "query": "Учебный месяц",
     "result": "visible_label_and_no_results_recovery_passed"
+  },
+  "followup": {
+    "date": "2026-10-24",
+    "change": "Preserve budget/request currency; reject cross-currency pending transfers without conversion",
+    "evidence": "docs/currency-verification.json"
   }
 }

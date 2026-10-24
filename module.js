@@ -55,6 +55,12 @@ const definition = {
     for (const r of rows(state, "requests")) {
       required(minor(r.amount) > 0, "Сумма должна быть положительной.");
       const old = changed(before, "requests", r.id);
+      if (old && old.budget !== r.budget)
+        required(
+          byId(before, "budgets", old.budget).currency ===
+            byId(state, "budgets", r.budget).currency,
+          "Перенос заявки возможен только в лимит той же валюты. Для другой валюты создайте новую заявку с явно указанной суммой.",
+        );
       if (!old)
         required(r.status === "pending", "Новая заявка создаётся в ожидании.");
       if (old && r.status !== old.status) {
@@ -83,6 +89,12 @@ const definition = {
       if (old?.status === "spent") immutable(old, r, ["status"]);
     }
     for (const b of rows(state, "budgets")) {
+      const old = changed(before, "budgets", b.id);
+      if (old && old.currency !== b.currency)
+        required(
+          !rows(state, "requests").some((x) => x.budget === b.id),
+          "В лимите есть заявки: валюту менять нельзя. Создайте отдельный лимит для другой валюты.",
+        );
       const used = rows(state, "requests")
         .filter(
           (x) => x.budget === b.id && ["approved", "spent"].includes(x.status),

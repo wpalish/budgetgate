@@ -1,0 +1,110 @@
+{
+  "date": "2026-10-24",
+  "product": "budgetgate",
+  "baseline_commit": "aff4ff5",
+  "original_defects": [
+    "Changing a budget currency relabelled existing request amounts without conversion, including approved/spent amounts",
+    "Moving a pending request to a differently denominated budget silently changed the meaning of its amount"
+  ],
+  "before_fix": {
+    "regressions_failed": 3,
+    "states_reproduced": [
+      "pending",
+      "approved",
+      "spent",
+      "rejected",
+      "archived"
+    ],
+    "approved_example": {
+      "amount": "7000",
+      "before_currency": "KZT",
+      "after_currency": "USD",
+      "before_available": "3000.00",
+      "after_available": "3000.00"
+    },
+    "pending_cross_currency_move_reproduced": true
+  },
+  "policy": "A budget with any linked request, including pending/rejected/archived, retains its currency. Pending request moves require matching source/destination currencies. Empty budget currency and same-currency limit/name edits remain allowed. No automatic conversion or retroactive correction.",
+  "tests": {
+    "passed": 7,
+    "failed": 0,
+    "runtime": "v24.19.0",
+    "log": "docs/test-output.txt",
+    "regression": "tests/currency.test.js",
+    "coverage": [
+      "all five linked request states reject currency relabelling unchanged",
+      "cross-currency pending move rejects; same-currency move and amount correction allowed",
+      "independent approval and existing budget ceiling remain tested",
+      "empty budget currency change and same-currency limit edits allowed",
+      "file restart preserves data/revision/audit; validated empty-database restore retains totals and protection"
+    ]
+  },
+  "browser": {
+    "data": "synthetic only on separate localhost8824",
+    "initial_records": "authenticated API; employee request approved by different admin",
+    "rejected_budget_currency_and_pending_move": {
+      "all_saved_data_unchanged": true,
+      "computed_totals_unchanged": true,
+      "currency": "KZT",
+      "reserved": "7000.00",
+      "available": "3000.00",
+      "revision": 7,
+      "audit_events": 7
+    },
+    "permitted_edits": {
+      "used_budget_currency_preserved": "KZT",
+      "same_currency_limit_edit": "12000",
+      "same_currency_request_move": true,
+      "pending_amount": "1000",
+      "empty_budget_currency_change": "USD",
+      "approved_request_unchanged": true,
+      "revision": 10,
+      "audit_events": 10,
+      "computed": [
+        {
+          "title": "SYNTHETIC KZT budget · KZT",
+          "lines": [
+            "Зарезервировано и отмечено: 7000.00",
+            "Доступно: 5000.00"
+          ]
+        },
+        {
+          "title": "SYNTHETIC USD budget · USD",
+          "lines": [
+            "Зарезервировано и отмечено: 0.00",
+            "Доступно: 10000.00"
+          ]
+        },
+        {
+          "title": "SYNTHETIC second KZT budget · KZT",
+          "lines": [
+            "Зарезервировано и отмечено: 0.00",
+            "Доступно: 10000.00"
+          ]
+        },
+        {
+          "title": "SYNTHETIC empty budget · USD",
+          "lines": [
+            "Зарезервировано и отмечено: 0.00",
+            "Доступно: 10000.00"
+          ]
+        }
+      ]
+    },
+    "after_page_reload": {
+      "available_5000_KZT_visible": true,
+      "empty_budget_USD_visible": true
+    },
+    "screens": [
+      "docs/currency-rejected.jpg",
+      "docs/transfer-rejected.jpg",
+      "docs/currency-preserved.jpg"
+    ]
+  },
+  "limits": [
+    "No currency conversion, exchange rates, bank transfer or real payment",
+    "Existing previously mislabelled data is not automatically repaired; manual reconciliation required",
+    "Server tested locally; no new hosting, customer acceptance or external security audit",
+    "Domain validation and error messages only; UI layout and database schema unchanged"
+  ]
+}

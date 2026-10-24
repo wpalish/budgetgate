@@ -1,34 +1,52 @@
 TAP version 13
-# Subtest: BudgetGate: complete original workflow, calculation and rejected invalid transition
-ok 1 - BudgetGate: complete original workflow, calculation and rejected invalid transition
+# Subtest: linked pending, approved, spent, rejected and archived requests retain their budget currency
+ok 1 - linked pending, approved, spent, rejected and archived requests retain their budget currency
   ---
-  duration_ms: 2.52425
+  duration_ms: 6.396291
+  type: 'test'
+  ...
+# Subtest: pending request moves require matching currencies; same-currency correction stays available
+ok 2 - pending request moves require matching currencies; same-currency correction stays available
+  ---
+  duration_ms: 0.521292
+  type: 'test'
+  ...
+# Subtest: currency rules survive file restart and restore while preserving approved and spent totals
+ok 3 - currency rules survive file restart and restore while preserving approved and spent totals
+  ---
+  duration_ms: 3.19725
+  type: 'test'
+  ...
+# Subtest: BudgetGate: complete original workflow, calculation and rejected invalid transition
+ok 4 - BudgetGate: complete original workflow, calculation and rejected invalid transition
+  ---
+  duration_ms: 2.633958
   type: 'test'
   ...
 # Subtest: real file restart, optimistic conflict and validated restore into an empty database
-ok 2 - real file restart, optimistic conflict and validated restore into an empty database
+ok 5 - real file restart, optimistic conflict and validated restore into an empty database
   ---
-  duration_ms: 3.420208
+  duration_ms: 3.950417
   type: 'test'
   ...
 # Subtest: HTTP prevents anonymous reads and cross-origin/CSRF writes while authenticated workflow saves
-ok 3 - HTTP prevents anonymous reads and cross-origin/CSRF writes while authenticated workflow saves
+ok 6 - HTTP prevents anonymous reads and cross-origin/CSRF writes while authenticated workflow saves
   ---
-  duration_ms: 71.214167
+  duration_ms: 75.2495
   type: 'test'
   ...
 # Subtest: two products on one host use isolated session cookies and preserve both logins
-ok 4 - two products on one host use isolated session cookies and preserve both logins
+ok 7 - two products on one host use isolated session cookies and preserve both logins
   ---
-  duration_ms: 89.32575
+  duration_ms: 86.661833
   type: 'test'
   ...
-1..4
-# tests 4
+1..7
+# tests 7
 # suites 0
-# pass 4
+# pass 7
 # fail 0
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 210.213667
+# duration_ms 217.270041
