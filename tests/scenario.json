@@ -1,0 +1,55 @@
+[
+  {
+    "collection": "budgets",
+    "as": "b",
+    "data": {
+      "name": "Учебный месяц",
+      "currency": "KZT",
+      "limit": "10000"
+    }
+  },
+  {
+    "actor": "operator",
+    "collection": "requests",
+    "as": "r",
+    "data": {
+      "budget": "$b",
+      "purpose": "Вымышленная покупка",
+      "amount": "7000",
+      "status": "pending"
+    }
+  },
+  {
+    "collection": "requests",
+    "id": "$r",
+    "data": {
+      "budget": "$b",
+      "purpose": "Вымышленная покупка",
+      "amount": "7000",
+      "status": "approved"
+    },
+    "expect": "Доступно: 3000.00"
+  },
+  {
+    "actor": "operator",
+    "collection": "requests",
+    "as": "r2",
+    "data": {
+      "budget": "$b",
+      "purpose": "Вторая покупка",
+      "amount": "4000",
+      "status": "pending"
+    }
+  },
+  {
+    "collection": "requests",
+    "id": "$r2",
+    "error": "Лимит",
+    "data": {
+      "budget": "$b",
+      "purpose": "Вторая покупка",
+      "amount": "4000",
+      "status": "approved"
+    }
+  }
+]

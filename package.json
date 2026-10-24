@@ -1,0 +1,14 @@
+{
+  "name": "budgetgate",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Заявки на расходы, независимое согласование и резервирование лимита подразделения. Деньги не переводятся.",
+  "engines": {
+    "node": ">=24.15 <25"
+  },
+  "scripts": {
+    "start": "node start.js",
+    "test": "node --test tests/*.test.js"
+  }
+}
